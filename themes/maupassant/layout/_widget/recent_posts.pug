@@ -1,0 +1,5 @@
+.widget
+  .widget-title
+    i.fa.fa-file-o
+    = ' ' + __('Updated')
+  != list_posts({amount: 10, orderby: 'updated'})

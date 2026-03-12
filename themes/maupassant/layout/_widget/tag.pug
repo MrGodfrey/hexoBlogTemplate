@@ -1,0 +1,17 @@
+- var tags = site.tags.toArray();
+
+- tags.sort(function(a, b) { return b.length - a.length; });
+
+.widget
+  .widget-title
+    i.fa.fa-star-o
+    = ' ' + __('tags')
+  .tagcloud
+    //- 原始代码 使用 https://hexo.io/docs/helpers.html#List 的代码
+    //- != tagcloud({min_font: 15, max_font: 15, amount: 100, orderby: 'count'})
+    ul(class="tagcloud")
+      for tag in tags
+        li(class="tagcloud")
+          a(href= config.root + 'tags/' + tag.name, title=tag.name, rel= tag.length) #{tag.name}
+          span(class="tagcloud") (#{tag.length})
+

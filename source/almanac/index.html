@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Almanac</title>
+<script>
+  var d = new Date();
+  var m = String(d.getMonth() + 1).padStart(2, '0');
+  var d2 = String(d.getDate()).padStart(2, '0');
+  window.location.replace('/almanac/' + m + '-' + d2 + '/');
+</script>
+</head>
+<body>
+<p>Redirecting to today's almanac...</p>
+</body>
+</html>

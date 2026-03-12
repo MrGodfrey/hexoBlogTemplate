@@ -1,0 +1,18 @@
+extends base
+
+block title
+  title= page.title + ' | ' + config.title
+
+block content
+  .post
+    h1.post-title= page.title
+    .post-meta
+      | #{page.date.format(config.date_format)}
+      i.fa.fa-pencil(style="padding-left:0.6em;padding-right:0.3em;")
+      | #{page.updated.format(config.date_format)}
+    .post-content
+      != page.content
+  if page.donate
+    include _widget/donate.pug
+  if page.comments
+    include _partial/comments.pug

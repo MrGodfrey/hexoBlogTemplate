@@ -1,0 +1,23 @@
+extends base
+
+block title
+  title= page.title + ' | ' + config.title
+
+block content
+  .post
+    h1.post-title= page.title
+    .post-archive
+      ul.listing
+        //- Determine the directory of the current page's source file
+        //- e.g. source/journal/meizhi/index.md -> journal/meizhi/
+        - var currentDir = page.source.substring(0, page.source.lastIndexOf('/') + 1)
+        
+        //- Filter pages that form part of this journal, excluding the index itself
+        - var journalPages = site.pages.filter(function(p) {
+        -   return p.source.startsWith(currentDir) && p.source !== page.source;
+        - }).sort('date', -1)
+
+        each p in journalPages.toArray()
+          li
+            span.date= date(p.date, 'YYYY-MM-DD')
+            a(href=url_for(p.path))= p.title

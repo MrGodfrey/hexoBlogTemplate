@@ -1,0 +1,45 @@
+//- 这一页是 /blog/tags 指向的页面
+
+extends base
+block title
+  title= page.title + ' | ' + config.title
+block content
+  .post
+    h1.post-title= page.title
+    .post-content
+      .tagcloud
+        for tag in site.tags.toArray().sort(function(a, b) { return b.length - a.length; })
+          a(href= config.root + 'tags/' + tag.name, title=tag.name, rel= tag.length) #{tag.name}
+
+  
+  .post-archive
+    span.post-count
+      | 总共写了 
+      a(href=config.root + 'archives/' style='color: #0066cc;') #{site.posts.length} 篇文章
+      | ，共 #{totalcount(site)} 字。
+    #random-posts
+      p 正在加载随机文章...
+
+  .post-archive
+    #history-posts
+      p 正在加载历史上的今天...
+
+  .post
+    h1.post-title
+      | Most Recent
+    p
+    .post-archive
+      - var allposts = site.posts.toArray().sort(function(a, b) { return b.date - a.date; }).slice(0, 20).reduce((r, v, i, a, k = -v.date.format('YYYY')) => ((r[k] || (r[k] = [])).push(v), r), {})
+      each posts, year in allposts
+        h3= -year
+        ul.listing
+          for post in posts
+            li
+              span.date= post.date.format(config.date_format)
+              a(href=url_for(post.path), title=post.title)
+                +title(post)
+
+    if (site.posts.length > 20)
+      h4
+        | and more 
+        a(href=config.root + 'archives/' style='color: #0066cc;') #{site.posts.length - 20} posts...

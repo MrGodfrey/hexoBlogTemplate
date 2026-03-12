@@ -1,0 +1,36 @@
+//- .darkmode-toggle 🌓
+
+script.
+  var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+  var html = document.querySelector('html');
+  html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+  //- 更新图标显示
+  function updateDarkModeIcon() {
+    var icon = document.querySelector('.darkmode-toggle i');
+    if (icon) {
+      if (html.dataset.dark === 'true') {
+        icon.className = 'fa fa-sun-o'; // 暗色模式显示太阳
+      } else {
+        icon.className = 'fa fa-moon-o'; // 亮色模式显示月亮
+      }
+    }
+  }
+
+  //- 切换暗色亮色
+  function toggleDarkMode() {
+    if (html) {
+      localStorage.dark = !(html.dataset.dark === 'true');
+      html.dataset.dark = localStorage.dark;
+      updateDarkModeIcon(); // 切换后更新图标
+    } else {
+      console.error('Failed to find the html element.');
+    }
+  }
+
+  //- 页面加载时初始化图标
+  document.addEventListener('DOMContentLoaded', function() {
+    updateDarkModeIcon();
+  });
+
+  //- 测试浏览器暗色模式,打开更多工具,点击渲染,打开css强制暗色即可

@@ -1,0 +1,12 @@
+# 更新 Markdown 文件的 updated 字段
+node update-timestamp.js || exit 1
+
+# 先把本地相对图片上传并替换为 URL
+node scripts/r2ify-sources.js || exit 1
+
+# 再做一次检测：如果还有相对图片,拒绝提交，提醒先上传
+node scripts/find-local-images.js || exit 1
+
+# 把被脚本改写过的 md 回加到索引
+git add source/
+git add scripts/
