@@ -32,6 +32,7 @@ const {
   R2_ACCESS_KEY_ID,
   R2_SECRET_ACCESS_KEY,
   R2_BUCKET,
+  R2_PUBLIC_BASE = '/assets',
   R2_KEY_PREFIX = 'posts'
 } = process.env;
 
@@ -83,6 +84,11 @@ function getMimeType(filePath) {
   };
   return mimeTypes[ext] || 'application/octet-stream';
 }
+
+function joinPublicUrl(base, key) {
+  return `${base.replace(/\/+$/, '')}/${key}`;
+}
+
 function findImages(text) {
   const items = [];
   // Markdown: ![alt](path "title")
@@ -212,7 +218,7 @@ async function processOnePost(mdPath) {
     // 首选：在同名目录里找
     let localAbs = path.join(assetDir, rel);
     let key = `${R2_KEY_PREFIX}/${baseNameNoExt}/${rel}`;
-    let publicUrl = `https://blog.drwang.fun/assets/${key}`;
+    let publicUrl = joinPublicUrl(R2_PUBLIC_BASE, key);
 
     if (!fs.existsSync(localAbs)) {
       // 兜底：按 source/_posts/<cleaned> 再找一次
@@ -220,7 +226,7 @@ async function processOnePost(mdPath) {
       if (fs.existsSync(altAbs)) {
         localAbs = altAbs;
         key = `${R2_KEY_PREFIX}/${cleaned}`;
-        publicUrl = `https://blog.drwang.fun/assets/${key}`;
+        publicUrl = joinPublicUrl(R2_PUBLIC_BASE, key);
       } else {
         // 找不到就跳过
         continue;

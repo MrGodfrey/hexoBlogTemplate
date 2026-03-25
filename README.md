@@ -41,6 +41,29 @@ python3 almanac.py --init
 ```
 *(注意：请确保你的电脑上已经安装了 Python 环境)*
 
+### 4. 可选：使用影评 / 书评 / 探店模板
+
+这个模板已经内置了类似“豆瓣”的卡片展示页。只要文章带有以下标签之一，对应的标签页就会自动切换为卡片视图：
+
+- `影评`
+- `书评`
+- `探店`
+
+推荐直接使用项目自带的 scaffold：
+
+```bash
+npx hexo new movie "My Movie Review"
+npx hexo new book "My Book Review"
+npx hexo new tan "My Restaurant Review"
+```
+
+这些模板已经预置了以下字段：
+
+- `rating`: 0 到 10 分，会自动渲染成 5 星样式
+- `show_tags`: 卡片页的子分类筛选，例如“科幻”“小说”“咖啡馆”
+- `city`: 仅探店卡片页使用，可按城市筛选
+- `excerpt`: 卡片摘要文本
+
 ---
 
 ## 本地预览（立即查看效果）
@@ -118,6 +141,14 @@ node scripts/r2ify-sources.js
 ```
 执行此命令是为了保证你的本地图片会被自动上传到之前配置好的 R2 服务器（图床）中。操作完成后即可正常运行后面的 Hexo 指令了。
 
+如果你准备配合 Cloudflare Pages Functions 对图片做同源代理，建议在 `.env` 中将 `R2_PUBLIC_BASE` 配置为：
+
+```bash
+R2_PUBLIC_BASE=/assets
+```
+
+这样上传脚本会把 Markdown 中的图片地址统一替换为 `/assets/...`，后续就能直接交给 Cloudflare Pages Functions 做受保护访问。
+
 **💡 进阶技巧：使用 Shell Alias 简化操作**
 
 如果你觉得每次预览或部署前都要手动运行一遍脚本有些麻烦，可以在你的本地终端配置文件（如 `~/.zshrc` 或 `~/.bashrc`）中创建一个 Shell 函数，将这两个步骤合并，实现“一键自动上传并预览”。
@@ -152,3 +183,90 @@ hd() {
 - `almanac.py`：生成或管理日记本（Almanac）时间。
 - `replace_r2_links.py`：批量将 Markdown 文件里的 R2 域名替换为本地资源链接。
 - `replace.py` 等批量替换/正则替换文本的工具脚本。
+
+## 使用 Cloudflare 进行博客加密
+
+如果你希望博客内容和图片都只能在登录后访问，推荐使用以下组合：
+
+- Cloudflare Pages：托管 Hexo 静态站点
+- Cloudflare Access：保护页面访问
+- Cloudflare Pages Functions + R2 Bucket Binding：保护图片访问
+
+### 1. 使用 Cloudflare Pages 部署站点
+
+1. 将博客代码推送到 GitHub。
+2. 在 Cloudflare Dashboard 中进入 `Workers & Pages`，导入现有 Git 仓库。
+3. 构建命令填写：
+
+```bash
+hexo generate
+```
+
+4. 输出目录填写：
+
+```bash
+public
+```
+
+5. 在 Pages 项目的环境变量中添加时区，避免文章永久链接中的日期在云端构建时错乱：
+
+```bash
+TZ=Asia/Shanghai
+```
+
+### 2. 绑定自定义域名
+
+1. 在 Pages 项目中打开 `Custom domains`。
+2. 添加你的博客域名，例如 `blog.example.com`。
+3. 按 Cloudflare 提示补齐对应的 DNS 记录。
+
+### 3. 用 Cloudflare Access 保护博客页面
+
+1. 打开 `Zero Trust`。
+2. 进入 `Access` -> `Applications`，创建一个 `Self-hosted` 应用。
+3. 受保护域名填写你的博客域名，例如 `blog.example.com`。
+4. 在访问策略中指定允许登录的邮箱、邮箱域名或身份提供商。
+5. 如果 Pages 还分配了默认的 `*.pages.dev` 域名，也要一并加上访问策略，否则别人仍然可以通过默认域名访问内容。
+
+### 4. 用 Pages Functions 保护图片
+
+模板已内置图片代理函数：
+
+- `functions/assets/[[path]].js`
+
+它的作用是：当访问 `/assets/...` 时，从 Cloudflare R2 读取对应对象并返回给浏览器。这样图片和网页保持同源，浏览器会自动携带 Cloudflare Access 的登录态，未登录用户无法直接读取图片。
+
+配置步骤如下：
+
+1. 在 Cloudflare Pages 项目的 `Settings` -> `Functions` -> `R2 bucket bindings` 中，添加一个绑定。
+2. 绑定名称填写：
+
+```bash
+BUCKET
+```
+
+3. 在本地 `.env` 文件中保留以下配置：
+
+```bash
+R2_ACCOUNT_ID=your-account-id
+R2_ACCESS_KEY_ID=your-access-key-id
+R2_SECRET_ACCESS_KEY=your-secret-access-key
+R2_BUCKET=your-bucket-name
+R2_KEY_PREFIX=posts
+R2_PUBLIC_BASE=/assets
+```
+
+4. 之后运行：
+
+```bash
+node scripts/r2ify-sources.js
+```
+
+脚本会把本地文章资源上传到 R2，并将文章中的图片链接替换为 `/assets/...`。
+
+### 5. 这一套方案为什么更安全
+
+- 页面先经过 Cloudflare Access 鉴权，未登录请求不会拿到 HTML。
+- 图片通过同源 `/assets/...` 路径访问，也会继承同样的访问控制。
+- Pages Functions 通过 R2 Binding 在 Cloudflare 内部读取对象，不需要公开你的 R2 存储桶。
+- 不需要额外处理图片跨域、Cookie 丢失或公开 CDN 泄露问题。

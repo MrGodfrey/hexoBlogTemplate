@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 336" role="img" aria-labelledby="title desc">
+  <title id="title">Movie Review Placeholder</title>
+  <desc id="desc">A neutral placeholder poster for movie reviews.</desc>
+  <rect width="240" height="336" fill="#e9ecef"/>
+  <rect x="28" y="28" width="184" height="280" rx="12" fill="#b8c2cc"/>
+  <rect x="52" y="60" width="136" height="110" rx="10" fill="#47525e"/>
+  <circle cx="84" cy="87" r="8" fill="#e9ecef"/>
+  <circle cx="120" cy="87" r="8" fill="#e9ecef"/>
+  <circle cx="156" cy="87" r="8" fill="#e9ecef"/>
+  <polygon points="101,115 101,160 148,137.5" fill="#e9ecef"/>
+  <text x="120" y="246" text-anchor="middle" font-size="28" font-family="Arial, sans-serif" fill="#33404d">MOVIE</text>
+</svg>

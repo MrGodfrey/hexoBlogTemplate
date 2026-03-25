@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 336" role="img" aria-labelledby="title desc">
+  <title id="title">Book Review Placeholder</title>
+  <desc id="desc">A neutral placeholder cover for book reviews.</desc>
+  <rect width="240" height="336" fill="#f4efe7"/>
+  <rect x="30" y="28" width="180" height="280" rx="12" fill="#d7c7b0"/>
+  <rect x="52" y="52" width="24" height="232" rx="8" fill="#8b6f47"/>
+  <rect x="88" y="90" width="96" height="18" rx="9" fill="#6a4f2c" opacity="0.85"/>
+  <rect x="88" y="126" width="70" height="12" rx="6" fill="#6a4f2c" opacity="0.55"/>
+  <rect x="88" y="148" width="82" height="12" rx="6" fill="#6a4f2c" opacity="0.55"/>
+  <text x="120" y="248" text-anchor="middle" font-size="28" font-family="Georgia, serif" fill="#6a4f2c">BOOK</text>
+</svg>

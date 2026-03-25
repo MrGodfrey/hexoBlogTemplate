@@ -24,6 +24,9 @@ head
   if page.tag == '游记'
     script(src='https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js')
     script(src='https://code.jquery.com/jquery-3.6.0.min.js')
+
+  if page.tag == '影评' || page.tag == '书评' || page.tag == '探店'
+    link(rel='stylesheet', type='text/css', href=url_for(theme.css) + '/reviews.css' + '?v=' + theme.version)
   
   link(rel='icon', mask='',sizes='32x32', href=url_for('favicon-32x32.png'))
   link(rel='icon', mask='',sizes='16x16', href=url_for('favicon-16x16.png'))

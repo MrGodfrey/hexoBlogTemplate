@@ -48,6 +48,9 @@ if page.mathjax
 if page.mathjax2
   include mathjax2.pug
 
+if page.tag == '影评' || page.tag == '书评' || page.tag == '探店'
+  script(type='text/javascript', src=url_for(theme.js) + '/reviews.js' + '?v=' + theme.version)
+
 script(type='text/javascript', src=url_for(theme.js) + '/codeblock-resizer.js' + '?v=' + theme.version)
 script(type='text/javascript', src=url_for(theme.js) + '/smartresize.js' + '?v=' + theme.version)
 script(src=url_for(theme.js) + '/history-today.js')

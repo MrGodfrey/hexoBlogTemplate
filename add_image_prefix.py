@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-将 source 目录中的 markdown 文件中的 {% img /assets/ 替换为 {% img https://blog.drwang.fun/assets/
+将 source 目录中的 markdown 文件中的 {% img /assets/ 替换为带有完整前缀的图片地址。
+
+通过环境变量 HEXO_IMAGE_PREFIX 配置前缀，例如：
+HEXO_IMAGE_PREFIX=https://your-site.example.com/assets/
 """
 
 import os
@@ -19,8 +22,10 @@ def add_image_prefix(directory):
     
     # 匹配 {% img /assets/ 格式的图片标签
     # 使用正则表达式处理可能存在的多个空格
+    prefix = os.environ.get('HEXO_IMAGE_PREFIX', 'https://your-site.example.com/assets/')
+    prefix = prefix.rstrip('/') + '/'
     pattern = re.compile(r'\{%\s*img\s+/assets/')
-    replacement = r'{% img https://blog.drwang.fun/assets/'
+    replacement = '{% img ' + prefix
     
     # 遍历目录下的所有文件
     for root, dirs, files in os.walk(directory):

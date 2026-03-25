@@ -10,6 +10,22 @@ block content
       | #{page.date.format(config.date_format)}
       i.fa.fa-pencil(style="padding-left:0.6em;padding-right:0.3em;")
       | #{page.updated.format(config.date_format)}
+      - var postTags = page.tags ? page.tags.toArray().map(function(t) { return t.name }) : []
+      - var isReview = postTags.indexOf('影评') >= 0 || postTags.indexOf('书评') >= 0 || postTags.indexOf('探店') >= 0
+      if isReview && page.rating > 0
+        span= '  '
+        span.review-rating(style='display: inline-flex')
+          - var fullStars = Math.floor(page.rating / 2)
+          - var halfStar = (page.rating % 2) >= 1
+          - var emptyStars = 5 - fullStars - (halfStar ? 1 : 0)
+          span.review-stars
+            - for (var i = 0; i < fullStars; i++)
+              i.fa.fa-star
+            - if (halfStar)
+              i.fa.fa-star-half-o
+            - for (var i = 0; i < emptyStars; i++)
+              i.fa.fa-star-o
+          span.review-rating-num= page.rating.toFixed(1)
     
     format(config.date_format) 
       if page.categories.length > 0

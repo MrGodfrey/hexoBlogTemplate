@@ -50,6 +50,10 @@ hexo.extend.filter.register('after_render:html', function (html, data) {
         return img;
       }
 
+      if (before.includes('review-poster')) {
+        return img;
+      }
+
       count++;
       return buildFigure(img);
     }

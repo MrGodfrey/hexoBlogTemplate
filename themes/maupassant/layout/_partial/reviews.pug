@@ -1,0 +1,78 @@
+//- Unified review template for 影评 / 书评 / 探店.
+
+- var reviewResult = get_review_data(page.tag)
+- var reviewData = reviewResult.items
+- var reviewJson = JSON.stringify(reviewData)
+
+- var totalRating = 0
+- var ratedCount = 0
+- reviewData.forEach(function(item) {
+-   if (item.rating > 0) {
+-     totalRating += item.rating
+-     ratedCount++
+-   }
+- })
+
+.reviews-page
+  .reviews-header
+    h1.reviews-title= page.tag
+    .reviews-stats
+      span.stat-item 共 #{reviewData.length} 篇
+      if ratedCount > 0
+        span.stat-item 平均评分 #{(totalRating / ratedCount).toFixed(1)}
+
+  .reviews-sort-bar
+    span.sort-label 排序：
+    a.sort-btn.active(href='#', data-sort='date') 按时间
+    a.sort-btn(href='#', data-sort='rating') 按评分
+
+  if reviewResult.categories.length > 0
+    .reviews-filter-bar
+      span.filter-label 分类：
+      a.filter-btn.active(href='#', data-tag='all') 全部
+      each cat in reviewResult.categories
+        a.filter-btn(href='#', data-tag=cat)= cat
+
+  if page.tag == '探店' && reviewResult.cities.length > 1
+    .reviews-filter-bar
+      span.filter-label 城市：
+      a.city-btn.active(href='#', data-city='all') 全部
+      each city in reviewResult.cities
+        a.city-btn(href='#', data-city=city)= city
+
+  #reviews-container
+    each item in reviewData
+      a.review-card(href=url_for(item.url), data-date=item.date, data-rating=item.rating, data-year=item.year, data-tags=item.show_tags.join(','), data-city=item.city)
+        .review-poster
+          if item.poster
+            img(src=item.poster, alt=item.title, loading='lazy')
+          else
+            .review-poster-placeholder
+              i.fa.fa-image
+        .review-info
+          .review-title-row
+            span.review-title= item.title
+            if item.pub_year
+              span.review-pub-year= '(' + item.pub_year + ')'
+          if item.rating > 0
+            .review-rating
+              - var fullStars = Math.floor(item.rating / 2)
+              - var halfStar = (item.rating % 2) >= 1
+              - var emptyStars = 5 - fullStars - (halfStar ? 1 : 0)
+              span.review-stars
+                - for (var i = 0; i < fullStars; i++)
+                  i.fa.fa-star
+                - if (halfStar)
+                  i.fa.fa-star-half-o
+                - for (var i = 0; i < emptyStars; i++)
+                  i.fa.fa-star-o
+              span.review-rating-num= item.rating.toFixed(1)
+          .review-meta
+            span.review-date= item.date_str
+            if item.city
+              span.review-city= ' · ' + item.city
+          if item.excerpt
+            .review-excerpt= item.excerpt
+
+script.
+  window.__reviewData = !{reviewJson};

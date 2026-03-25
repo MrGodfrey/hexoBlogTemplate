@@ -8,7 +8,7 @@ import os
 
 def replace_r2_links(directory):
     """
-    遍历指定目录下的所有 markdown 文件，替换链接中的 https://assets.drwang.fun/
+    遍历指定目录下的所有 markdown 文件，替换链接中的 https://your-r2-domain.com/
     
     Args:
         directory: 要处理的目录路径
@@ -29,7 +29,7 @@ def replace_r2_links(directory):
                         content = f.read()
                     
                     # 统计替换次数
-                    replacements = content.count('https://assets.drwang.fun/')
+                    replacements = content.count('https://your-r2-domain.com/')
                     
                     if replacements > 0:
                         # 执行替换
