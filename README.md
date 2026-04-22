@@ -1,5 +1,34 @@
 # Hexo Blog Template
 
+<p align="center">
+  <a href="https://hexoblogtemplate.pages.dev/">
+    <img src="https://img.shields.io/badge/Demo-hexoblogtemplate.pages.dev-f97316?logo=cloudflarepages&logoColor=white" alt="Demo">
+  </a>
+  <a href="https://github.com/tufu9441/maupassant-hexo">
+    <img src="https://img.shields.io/badge/Theme-Maupassant-111827?logo=hexo&logoColor=white" alt="Theme">
+  </a>
+  <a href="https://hexoblogtemplate.pages.dev/">
+    <img src="https://img.shields.io/badge/Review%20Cards-Douban%20Style-16a34a?logo=bookstack&logoColor=white" alt="Review Cards">
+  </a>
+</p>
+
+## 为什么用这个模板
+
+如果你想要一个适合长期写作、视觉上克制、又不至于千篇一律的 Hexo 博客，这个模板会是一个很省心的起点。
+
+它最突出的地方，在于把真正高频、真正会长期使用的那部分体验先做好：
+
+- 整体页面布局克制、干净，适合长文章阅读，不会让内容被过度装饰抢走注意力
+- 影评 / 书评 / 探店已经内置类似豆瓣的条目卡片展示，特别适合做持续积累型的内容整理
+- 普通文章、Almanac、Journal 这几类内容入口已经分开，后期扩写不容易乱
+- 默认就能直接本地预览、部署到 GitHub Pages 或 Cloudflare Pages，不强绑图床或额外云服务
+
+示例页面：
+
+- [在线预览](https://hexoblogtemplate.pages.dev/)
+
+这个模板基于 `maupassant` 主题做了定制和扩展。`maupassant` 本身就是 Hexo 里很经典、也很耐看的简洁主题，这里也特别感谢 [tufu9441](https://github.com/tufu9441) 和原始的 [maupassant-hexo](https://github.com/tufu9441/maupassant-hexo) 项目。
+
 一个偏中文写作的 Hexo 博客模板，已经包含：
 
 - `maupassant` 主题定制
