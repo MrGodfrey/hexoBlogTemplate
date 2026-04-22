@@ -3,10 +3,18 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "almanac:init": "python3 almanac.py --init",
     "build": "hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
+    "new:book": "hexo new book",
+    "new:movie": "hexo new movie",
+    "new:page": "hexo new page",
+    "new:post": "hexo new",
+    "new:tan": "hexo new tan",
+    "new:travel": "hexo new travel",
     "server": "hexo server",
+    "release": "hexo clean && hexo generate && hexo deploy",
     "prepare": "husky"
   },
   "hexo": {

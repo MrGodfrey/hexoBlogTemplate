@@ -126,8 +126,8 @@ theme: maupassant
 ## Docs: https://hexo.io/docs/one-command-deployment
 # deploy:
 #   type: git
-#   repo: git@github.com:MrGodfrey/blog.git 
-#   branch: gh-pages
+#   repo: git@github.com:your-github-id/your-github-id.github.io.git
+#   branch: main
  
 jsonContent:
   meta: false

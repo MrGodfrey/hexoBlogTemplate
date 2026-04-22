@@ -1,272 +1,571 @@
-# Hexo Blog
+# Hexo Blog Template
 
-## 获取此博客模板
+一个偏中文写作的 Hexo 博客模板，已经包含：
 
-如果你没有任何 Git 基础，可以通过以下方式快速获取此项目：
-**直接下载：** 在项目页面点击绿色的 "Code" 按钮，选择 "Download ZIP"。下载完成后，将其解压到你的本地文件夹中即可。
+- `maupassant` 主题定制
+- `Almanac` 年历式页面
+- `Journal` 专用页面类型
+- 影评 / 书评 / 探店卡片页
+- 自定义 scaffold
+- 自动维护 Markdown `updated` 字段的提交钩子
 
-*如果你安装了 Git，也可以在终端执行（注意：请先 `cd` 到一个合适的位置，也就是你想存放这个项目文件夹的地方，不要直接在系统的根目录等地方直接操作）：*
+这个模板默认不要求 Cloudflare、R2、外部图床或额外鉴权服务。下载后完成基础配置，就可以直接本地预览并部署到 GitHub Pages。
+
+## 1. 获取模板
+
+如果你不会 Git，最简单的方式是直接下载 ZIP：
+
+1. 打开本项目页面。
+2. 点击绿色 `Code` 按钮。
+3. 选择 `Download ZIP`。
+4. 解压到你想保存项目的位置。
+
+如果你已经安装了 Git，可以直接克隆：
+
 ```bash
-git clone <本仓库地址>
-cd <你的文件夹名称>
+git clone <你的仓库地址>
+cd <你的项目目录>
 ```
 
-## 快速开始（跑起来只需三步）
+## 2. 环境要求
 
-要让这个博客示例在本地成功跑起来，请依次完成以下三步操作：
+建议先准备好下面这些环境：
 
-### 1. 安装依赖
+- Node.js 18 或更高版本
+- npm
+- Python 3
 
-确保你已经安装了 Node.js。在终端（命令行）中进入当前项目根目录，运行以下命令：
+可选但推荐：
+
+- 已配置好的 Git / GitHub 账号
+
+安装完项目依赖后，可以直接在仓库根目录使用：
+
+- `hexo s`
+- `hexo g`
+- `hexo d`
+
+也就是说，默认工作流不要求你额外全局安装 `hexo-cli`。
+
+## 3. 快速开始
+
+### 3.1 安装依赖
+
+在项目根目录执行：
+
 ```bash
 npm install
 ```
 
-### 2. 配置 Cloudflare R2 存储桶
+### 3.2 初始化 Almanac 页面
 
-本项目使用了 Cloudflare R2 作为配套图床存储。**为什么需要配置存储桶？** 是因为这个博客将存储桶作为图床使用，以便于之后将整个博客进行加密。所谓的“图床”作用在于：如果不加这个功能，Git 仓库就会因为存储了太多的图片文件而变得非常庞大。但在这个机制下，只要将所有图片先上传到存储桶中，文章文件之中就只会保留指向该云端图片的引用链接。需要注意的是，你的本地文件中依然是有图片保留的。
+这个模板带有 `source/almanac/`，第一次使用前建议执行初始化：
 
-请按照以下步骤进行详细配置：
-1. 注册并登录 [Cloudflare 控制台](https://dash.cloudflare.com/)。
-2. 在左侧菜单栏找到 **Storage & databases**，选择其下的 **R2 object storage**。
-3. 点击 **创建存储桶 (Create bucket)** 并命名。创建完成后，记下你的**存储桶名称**。
-4. 返回 R2 概览页面，在右上方点击 **管理 R2 API 令牌 (Manage R2 API Tokens)**，生成具有读写权限的**账户 ID (Account ID)**、**访问密钥 ID (Access Key ID)** 和 **机密访问密钥 (Secret Access Key)**。
-5. 在博客代码仓库根目录中，找到 `.env_template` 文件。打开它并将刚才获取到的配置信息对应填入。填好后，重命名此文件为 `.env`。
+```bash
+npm run almanac:init
+```
 
-### 3. 初始化日记本页面
+如果你的系统没有识别 `python3`，也可以手动运行：
 
-本项目包含自定义的日记本（Almanac）页面。在使用前，需要在根目录中执行以下命令进行初始化生成：
 ```bash
 python3 almanac.py --init
 ```
-*(注意：请确保你的电脑上已经安装了 Python 环境)*
 
-### 4. 可选：使用影评 / 书评 / 探店模板
+### 3.3 本地启动
 
-这个模板已经内置了类似“豆瓣”的卡片展示页。只要文章带有以下标签之一，对应的标签页就会自动切换为卡片视图：
+直接运行：
+
+```bash
+hexo s
+```
+
+启动成功后，浏览器打开 [http://localhost:4000](http://localhost:4000)。
+
+如果你更喜欢统一走 `npm scripts`，等价命令是：
+
+```bash
+npm run server
+```
+
+## 4. 你需要先改掉的配置
+
+模板中的默认值只是占位符。第一次使用前，至少检查下面几个地方：
+
+### 4.1 站点信息
+
+编辑根目录 `./_config.yml`：
+
+- `title`
+- `subtitle`
+- `description`
+- `author`
+- `language`
+- `url`
+- `timezone`
+
+### 4.2 主题信息
+
+编辑 `./themes/maupassant/_config.yml`：
+
+- `menu`
+- `widgets`
+- `info.avatar`
+- `info.outlinkitem`
+- `post_copyright.author`
+- `post_copyright.contact`
+- 评论系统配置
+
+### 4.3 部署信息
+
+如果你要部署到 GitHub Pages，需要把 `_config.yml` 里的 `deploy` 段改成你自己的仓库地址，例如：
+
+```yaml
+deploy:
+  type: git
+  repo: git@github.com:your-github-id/your-github-id.github.io.git
+  branch: main
+```
+
+## 5. 本地预览与构建
+
+### 5.1 本地预览
+
+```bash
+hexo s
+```
+
+这是最常用的日常命令。
+
+### 5.2 只生成静态文件
+
+```bash
+hexo g
+```
+
+生成结果会输出到 `public/`。
+
+等价命令：
+
+```bash
+npm run build
+```
+
+### 5.3 清理缓存
+
+```bash
+hexo clean
+```
+
+如果你修改了主题、布局或生成逻辑后出现奇怪问题，可以先执行这个命令，再重新构建。
+
+## 6. 部署到 GitHub Pages
+
+### 6.1 创建仓库
+
+推荐新建一个公开仓库：
+
+- 用户主页站点：`<你的 GitHub 用户名>.github.io`
+- 项目站点：任意仓库名都可以，但需要同时修改 `url` 和 `root`
+
+### 6.2 配置 deploy
+
+在 `_config.yml` 中填写：
+
+```yaml
+deploy:
+  type: git
+  repo: git@github.com:your-github-id/your-github-id.github.io.git
+  branch: main
+```
+
+### 6.3 一键发布
+
+这个模板已经加了一个更适合日常使用的命令：
+
+```bash
+npm run release
+```
+
+它会顺序执行：
+
+1. `hexo clean`
+2. `hexo generate`
+3. `hexo deploy`
+
+如果你只想在已经构建完成的前提下单独部署，也可以执行：
+
+```bash
+hexo d
+```
+
+### 6.4 部署到 Cloudflare Pages
+
+如果你想把这个仓库部署到 Cloudflare Pages，推荐直接使用 Pages 的 Git 集成功能。对这个模板来说，这是最省事的方案。
+
+#### 第一步：把仓库推到 GitHub 或 GitLab
+
+先把博客仓库推到远端。Pages 会直接从你的 Git 仓库拉代码并自动构建。
+
+#### 第二步：在 Cloudflare 创建 Pages 项目
+
+在 Cloudflare Dashboard 中依次进入：
+
+1. `Workers & Pages`
+2. `Create application`
+3. `Pages`
+4. `Connect to Git`
+
+然后选择你的 GitHub 或 GitLab 仓库。
+
+#### 第三步：填写构建配置
+
+这个模板建议使用下面这组配置：
+
+- Production branch: `main`
+- Build command: `npm run build`
+- Build output directory: `public`
+- Root directory: 留空
+
+这个仓库的 `npm run build` 实际执行的是 `hexo generate`，因此 Pages 只需要构建并上传 `public/` 即可。
+
+#### 第四步：点击保存并部署
+
+点击 `Save and Deploy` 后，Cloudflare Pages 会自动：
+
+1. 安装依赖
+2. 执行构建命令
+3. 发布到你的 `*.pages.dev` 子域名
+
+第一次部署成功后，后续只要你继续向生产分支推送代码，Pages 就会自动重新构建和发布。
+
+#### 第五步：以后如何更新站点
+
+如果你已经接入了 Pages 的 Git 集成，以后通常不需要再执行：
+
+```bash
+hexo d
+```
+
+对 Cloudflare Pages 来说，更常见的发布动作是：
+
+```bash
+git push origin main
+```
+
+也就是说：
+
+- GitHub Pages 风格：本地 `hexo d`
+- Cloudflare Pages 风格：推代码后云端自动构建
+
+#### 可选：固定 Node.js 版本
+
+Cloudflare Pages 当前默认提供 Node.js 22 构建环境。如果你想显式固定版本，可以在 Pages 项目里设置环境变量：
+
+- `NODE_VERSION=22`
+
+如果你希望构建时间与仓库配置保持一致，也可以额外设置：
+
+- `TZ=Asia/Shanghai`
+
+这一条是针对当前模板的时区配置做的仓库级建议，不是 Pages 的强制要求。
+
+#### 可选：绑定自定义域名
+
+部署完成后，你可以在 Pages 项目的 `Custom domains` 中绑定自己的域名或子域名。
+
+#### 这个模板在 Pages 上不需要额外配置什么
+
+按当前模板的默认用法，部署静态站点到 Pages 时：
+
+- 不需要 `hexo-deployer-git`
+- 不需要额外的 R2 配置
+- 不需要额外的图床校验脚本
+- 不需要额外绑定 Pages Functions 环境变量
+
+如果你后续自己启用了 `functions/` 目录下的额外能力，或者重新接入对象存储、图片代理，再单独补对应配置即可。
+
+## 7. 如何少输命令
+
+这是很多人真正会用到的部分。
+
+### 7.1 最简单的方式：直接用 npm scripts
+
+如果你习惯直接使用 Hexo 命令，最常用的是：
+
+```bash
+hexo s
+hexo g
+hexo d
+```
+
+如果你更喜欢固定脚本名，模板也已经内置：
+
+```bash
+npm run server
+npm run build
+npm run release
+```
+
+### 7.2 用 shell 函数做到“不用先 cd 进目录”
+
+如果你经常在终端里操作博客，可以把下面的函数放进 `~/.zshrc` 或 `~/.bashrc`：
+
+```bash
+hbs() {
+  cd /path/to/your/blog || return
+  hexo s
+}
+
+hbd() {
+  cd /path/to/your/blog || return
+  hexo clean && hexo g && hexo d
+}
+```
+
+保存后执行：
+
+```bash
+source ~/.zshrc
+```
+
+以后你只需要输入：
+
+```bash
+hbs
+hbd
+```
+
+### 7.3 用 SSH 别名简化 deploy 仓库地址
+
+如果你不想在 `_config.yml` 里写很长的 GitHub SSH 地址，可以配置 `~/.ssh/config`：
+
+```sshconfig
+Host github-blog
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519
+  IdentitiesOnly yes
+```
+
+然后把 `_config.yml` 的 deploy 仓库地址写成：
+
+```yaml
+deploy:
+  type: git
+  repo: github-blog:your-github-id/your-github-id.github.io.git
+  branch: main
+```
+
+这样做的好处是：
+
+- deploy 配置更短
+- 如果你有多把 SSH key，更容易管理
+- 换机器时只要迁移 SSH 配置即可
+
+## 8. 写作方式
+
+### 8.1 普通文章
+
+```bash
+npm run new:post -- "My New Post"
+```
+
+### 8.2 页面
+
+```bash
+npm run new:page -- about
+```
+
+### 8.3 影评 / 书评 / 探店
+
+```bash
+npm run new:movie -- "My Movie Review"
+npm run new:book -- "My Book Review"
+npm run new:tan -- "My Restaurant Review"
+```
+
+### 8.4 游记
+
+```bash
+npm run new:travel -- "My Travel Note"
+```
+
+## 9. 影评 / 书评 / 探店卡片系统
+
+这个模板内置了类似豆瓣列表页的卡片展示逻辑。
+
+只要文章标签包含下面任意一种，对应标签页就会自动切换成卡片视图：
 
 - `影评`
 - `书评`
 - `探店`
 
-推荐直接使用项目自带的 scaffold：
+### 9.1 常用 front-matter 字段
 
-```bash
-npx hexo new movie "My Movie Review"
-npx hexo new book "My Book Review"
-npx hexo new tan "My Restaurant Review"
-```
+- `rating`
+  0 到 10 分，会自动换算成星级展示
+- `show_tags`
+  用于卡片页的子分类筛选
+- `excerpt`
+  用于卡片摘要
+- `city`
+  仅探店页使用，可按城市筛选
+- `pub_year`
+  可选，用于补充作品出版年份
 
-这些模板已经预置了以下字段：
+### 9.2 卡片封面规则
 
-- `rating`: 0 到 10 分，会自动渲染成 5 星样式
-- `show_tags`: 卡片页的子分类筛选，例如“科幻”“小说”“咖啡馆”
-- `city`: 仅探店卡片页使用，可按城市筛选
-- `excerpt`: 卡片摘要文本
+模板会按下面顺序寻找卡片封面：
 
----
+1. 文章正文中的最后一张图片
+2. 内置的通用占位图
 
-## 本地预览（立即查看效果）
+也就是说，即使你一篇影评 / 书评 / 探店文章里暂时没有插图，页面也不会空掉。
 
-做完上面三件事之后，你现在可以立刻在本地预览你的博客效果了！
+## 10. 图片如何处理
 
-**注意：**如果你之前没有在电脑上全局安装过 Hexo CLI（即运行 `hexo` 命令时提示 `command not found`），你需要使用 `npx` 来调用项目中安装的本地依赖。后面的所有涉及 `hexo` 的命令同理。
-> **💡 建议：**为了方便以后使用，你可以通过运行 npm install -g hexo-cli 来全局安装 Hexo。安装后，你就可以直接使用 `hexo` 而不需要每次加 `npx` 啦。
+这个模板默认开启了：
 
-请在终端中运行以下命令：
-```bash
-npx hexo server
-```
-*(也可以使用简写命令 `npx hexo s`。如果你已经全局安装过 Hexo，直接使用 `hexo server` 即可)*
-
-当终端显示 `Hexo is running at http://localhost:4000/` 时，打开你的浏览器，访问 `http://localhost:4000` 即可马上看到你自己的博客啦！
-
-
-
----
-
-## 部署上线到 GitHub Pages
-
-当你在本地文章写好后，通常会推荐使用 GitHub Pages 将静态网页部署到公网，免费且稳定。以下是详细步骤：
-
-### 1. 部署前准备
-1. 登录 GitHub，新建一个**公开的 (Public)** 仓库，仓库名必须严格命名为：`<你的 GitHub 用户名>.github.io`。
-2. 回到本地博客根目录，打开 `_config.yml` 配置文件。
-3. 滑动到文件最底部，找到 `deploy:` 字段，将其修改为如下格式：
 ```yaml
-deploy:
-  type: git
-  repo: https://github.com/<你的 GitHub 用户名>/<你的 GitHub 用户名>.github.io.git
-  branch: main  # 或者填写 master
-```
-4. 如果还没装过部署插件，需要在终端运行以下命令安装：
-```bash
-npm install hexo-deployer-git --save
+post_asset_folder: true
 ```
 
-### 2. 一键发布
-一切配置完毕后，你只需要依次运行（同样，如果没全局安装需加 `npx`）：
-```bash
-npx hexo clean
-npx hexo generate
-npx hexo deploy
+也就是说，你可以直接使用 Hexo 的文章资源目录方式管理图片。
+
+例如新建一篇文章后：
+
+```text
+source/_posts/My-New-Post.md
+source/_posts/My-New-Post/image-1.jpg
 ```
-或者使用一键打包发布命令：
-```bash
-npx hexo d -g
-```
-等待命令执行完毕，几分钟后访问 `https://<你的 GitHub 用户名>.github.io` 就能向全世界展示你的博客了！
 
----
+只要 Markdown 引用正确，Hexo 本地预览和常规部署就可以直接工作。模板默认不要求图床，也不会在提交时强制上传图片。
 
-## 基本写作与操作命令
+## 11. Almanac 与 Journal
 
-### 写作
+### 11.1 Almanac
+
+`source/almanac/` 是年历式短记录页面。模板已经带有对应布局：
+
+- `layout: almanac-day`
+- `source/almanac/index.html`
+- `themes/maupassant/layout/almanac-day.pug`
+
+首次使用请执行：
 
 ```bash
-npx hexo new "My New Post"
-```
-或者使用具体的 layout，比如新建一个关于页面：
-```bash
-npx hexo new page "about"
+npm run almanac:init
 ```
 
-### 插入图片
+### 11.2 Journal
 
-如果你使用的是 VS Code 编辑器，直接将图片拖进编辑器窗口即可。它会自动生成 Markdown 格式的图片引用，并且会自动将这个图片复制并保存到你的项目文件之中。
+`source/journal/` 是比普通文章更专题化的记录页面，模板中已经准备了对应布局：
 
-当你在此之后准备执行 `npx hexo s` 等命令进行预览或发布时，由于新增了本地图片没有上云，终端会提醒你需要先运行以下脚本：
-```bash
-node scripts/r2ify-sources.js
-```
-执行此命令是为了保证你的本地图片会被自动上传到之前配置好的 R2 服务器（图床）中。操作完成后即可正常运行后面的 Hexo 指令了。
+- `themes/maupassant/layout/journal.pug`
+- `themes/maupassant/layout/journal-index.pug`
 
-如果你准备配合 Cloudflare Pages Functions 对图片做同源代理，建议在 `.env` 中将 `R2_PUBLIC_BASE` 配置为：
+如果你不需要这个能力，可以暂时不使用；它不会影响普通文章写作。
 
-```bash
-R2_PUBLIC_BASE=/assets
-```
+## 12. 仓库结构
 
-这样上传脚本会把 Markdown 中的图片地址统一替换为 `/assets/...`，后续就能直接交给 Cloudflare Pages Functions 做受保护访问。
+常用目录如下：
 
-**💡 进阶技巧：使用 Shell Alias 简化操作**
+- `source/`
+  站点内容本体
+- `source/_posts/`
+  普通文章
+- `source/almanac/`
+  Almanac 页面
+- `themes/maupassant/`
+  主题布局、样式和前端脚本
+- `scaffolds/`
+  文章模板
+- `scripts/`
+  Hexo 构建辅助脚本
+- `.husky/`
+  Git hooks
 
-如果你觉得每次预览或部署前都要手动运行一遍脚本有些麻烦，可以在你的本地终端配置文件（如 `~/.zshrc` 或 `~/.bashrc`）中创建一个 Shell 函数，将这两个步骤合并，实现“一键自动上传并预览”。
+## 13. 自带脚本与自动化
 
-打开你的终端配置文件（以 zsh 为例）：
-```bash
-nano ~/.zshrc
-```
+### 13.1 提交钩子
 
-在文件末尾添加以下内容：
-```bash
-# Hexo 一键上传图片并启动本地服务器
-hs() {
-    node scripts/r2ify-sources.js
-    npx hexo s
-}
+模板默认启用了 Husky。当前提交钩子只做一件事：
 
-# 同样，也可以为一键部署配置快捷命令
-hd() {
-    node scripts/r2ify-sources.js
-    npx hexo clean && npx hexo generate && npx hexo deploy
-}
-```
+- 自动更新 Markdown 的 `updated` 字段
 
-保存退出后，在终端运行 `source ~/.zshrc` 使配置生效。之后，当你插入了一张新图片想预览时，只需在项目根目录直接输入 `hs`，系统就会先自动运行上云脚本，紧接着启动本地服务器啦！
+这意味着你平时正常提交文章时，不需要手动维护更新时间。
 
+### 13.2 其他辅助脚本
 
+仓库里还有一些 Python / Node / Shell 脚本，用于：
 
-## 本地依赖脚本
+- 初始化 Almanac
+- 处理标签页面
+- 批量替换文本
+- 图片相关维护
 
-如果由于需要在 Cloudflare R2 / 相册等相关图片存储库之间做链接转换，或者进行博客维护使用，仓库内包含一些 Python 和 Shell 脚本：
-- `almanac.py`：生成或管理日记本（Almanac）时间。
-- `replace_r2_links.py`：批量将 Markdown 文件里的 R2 域名替换为本地资源链接。
-- `replace.py` 等批量替换/正则替换文本的工具脚本。
+这些脚本不是博客正常运行的必需条件。你可以先不碰它们，等确实有需要时再看。
 
-## 使用 Cloudflare 进行博客加密
+## 14. 发布前的个人信息检查
 
-如果你希望博客内容和图片都只能在登录后访问，推荐使用以下组合：
+这是公开模板最容易忽略的地方。第一次发布到自己的仓库前，建议逐项检查：
 
-- Cloudflare Pages：托管 Hexo 静态站点
-- Cloudflare Access：保护页面访问
-- Cloudflare Pages Functions + R2 Bucket Binding：保护图片访问
+- `_config.yml` 里的 `title`、`author`、`url`
+- `themes/maupassant/_config.yml` 里的 `avatar`、社交链接、邮箱、版权信息
+- deploy 仓库地址
+- 评论系统域名和密钥
+- 示例文章内容是否需要替换
 
-### 1. 使用 Cloudflare Pages 部署站点
+如果你准备把这个模板继续公开发布给别人使用，尤其要确认不要把下面这些信息写死在模板里：
 
-1. 将博客代码推送到 GitHub。
-2. 在 Cloudflare Dashboard 中进入 `Workers & Pages`，导入现有 Git 仓库。
-3. 构建命令填写：
+- 真实姓名
+- 私人邮箱
+- 私有域名
+- 私有 API 地址
+- 私人图片 CDN 地址
+- 私有 Git 仓库地址
 
-```bash
-hexo generate
-```
+## 15. 常见问题
 
-4. 输出目录填写：
+### 15.1 `hexo: command not found`
+
+先确认你已经执行过：
 
 ```bash
-public
+npm install
 ```
 
-5. 在 Pages 项目的环境变量中添加时区，避免文章永久链接中的日期在云端构建时错乱：
+然后重新打开一个终端窗口，再执行：
 
 ```bash
-TZ=Asia/Shanghai
+hexo s
 ```
 
-### 2. 绑定自定义域名
-
-1. 在 Pages 项目中打开 `Custom domains`。
-2. 添加你的博客域名，例如 `blog.example.com`。
-3. 按 Cloudflare 提示补齐对应的 DNS 记录。
-
-### 3. 用 Cloudflare Access 保护博客页面
-
-1. 打开 `Zero Trust`。
-2. 进入 `Access` -> `Applications`，创建一个 `Self-hosted` 应用。
-3. 受保护域名填写你的博客域名，例如 `blog.example.com`。
-4. 在访问策略中指定允许登录的邮箱、邮箱域名或身份提供商。
-5. 如果 Pages 还分配了默认的 `*.pages.dev` 域名，也要一并加上访问策略，否则别人仍然可以通过默认域名访问内容。
-
-### 4. 用 Pages Functions 保护图片
-
-模板已内置图片代理函数：
-
-- `functions/assets/[[path]].js`
-
-它的作用是：当访问 `/assets/...` 时，从 Cloudflare R2 读取对应对象并返回给浏览器。这样图片和网页保持同源，浏览器会自动携带 Cloudflare Access 的登录态，未登录用户无法直接读取图片。
-
-配置步骤如下：
-
-1. 在 Cloudflare Pages 项目的 `Settings` -> `Functions` -> `R2 bucket bindings` 中，添加一个绑定。
-2. 绑定名称填写：
+如果你仍然不想直接用 `hexo` 命令，也可以退回到：
 
 ```bash
-BUCKET
+npm run server
 ```
 
-3. 在本地 `.env` 文件中保留以下配置：
+### 15.2 改了主题但页面没变化
+
+先执行：
 
 ```bash
-R2_ACCOUNT_ID=your-account-id
-R2_ACCESS_KEY_ID=your-access-key-id
-R2_SECRET_ACCESS_KEY=your-secret-access-key
-R2_BUCKET=your-bucket-name
-R2_KEY_PREFIX=posts
-R2_PUBLIC_BASE=/assets
+hexo clean
+hexo g
 ```
 
-4. 之后运行：
+### 15.3 deploy 报 Git 权限错误
 
-```bash
-node scripts/r2ify-sources.js
-```
+优先检查：
 
-脚本会把本地文章资源上传到 R2，并将文章中的图片链接替换为 `/assets/...`。
+- SSH key 是否已经加到 GitHub
+- `_config.yml` 里的 `repo` 是否正确
+- SSH 别名是否配置正确
 
-### 5. 这一套方案为什么更安全
+### 15.4 图片很多，会不会把仓库变大
 
-- 页面先经过 Cloudflare Access 鉴权，未登录请求不会拿到 HTML。
-- 图片通过同源 `/assets/...` 路径访问，也会继承同样的访问控制。
-- Pages Functions 通过 R2 Binding 在 Cloudflare 内部读取对象，不需要公开你的 R2 存储桶。
-- 不需要额外处理图片跨域、Cookie 丢失或公开 CDN 泄露问题。
+会。这个模板默认选择的是“普通 Hexo 可直接使用”的方案，也就是不强制依赖图床。优点是简单，缺点是图片很多时仓库会变大。
+
+如果你以后确实需要图床、对象存储或更复杂的资源代理，建议在你自己的博客仓库里按需添加，而不是把它作为公共模板的默认前提。
